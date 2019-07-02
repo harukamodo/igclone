@@ -29,6 +29,7 @@ ALLOWED_HOSTS = []
 
 AUTH_USER_MODEL = 'users.Profile'
 
+LOGIN_URL = "/admin/"
 
 # Application definition
 
