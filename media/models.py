@@ -20,6 +20,7 @@ class Comment(models.Model):
         related_name="commented",
         on_delete=models.CASCADE
     )
+    comment = models.CharField(max_length=500)
     post_date = models.DateTimeField(auto_now_add=True, db_index=True)
     
 

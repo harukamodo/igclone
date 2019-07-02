@@ -60,6 +60,14 @@ class Profile(AbstractBaseUser):
     def is_staff(self):
         return self.is_admin
 
+    def get_followers(self):
+        followers = [ f.user_following for f in self.followers.all() ]
+        return followers
+    
+    def get_following(self):
+        following = [ f.user_followed for f in self.following.all() ]
+        return following
+
 class Follower(models.Model):
     user_followed = models.ForeignKey(
         Profile,
