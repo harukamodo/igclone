@@ -60,13 +60,43 @@ class Profile(AbstractBaseUser):
     def is_staff(self):
         return self.is_admin
 
+    # returns followers in a list
     def get_followers(self):
         followers = [ f.user_following for f in self.followers.all() ]
         return followers
     
+    # returns users profile is following in a list
     def get_following(self):
         following = [ f.user_followed for f in self.following.all() ]
         return following
+    
+    # returns a bool depending on if another user is following this user
+    def is_followed_by_user(self, pk):
+        followed_by = pk in [ f.pk for f in self.get_followers()]
+
+    # returns a bool depending on if this user is following another user
+    def is_following_user(self, pk):
+        following =  pk in [ f.pk for f in  self.get_following()]
+        return following
+
+    # returns the following object where this user is user_followed_by
+    def get_follower_object(self, pk):
+        following = None
+        if self.is_following_user(pk):
+            following = Follower.objects.get(
+                    user_following_pk=pk,
+                    user_followed_by=self)
+        return following
+
+    def get_followed_by_object(self, pk):
+        followed_by = None
+        if self.is_followed_by_user(pk):
+            followed_by = Follower.objects.get(
+                    user_following=self,
+                    user_followed_by_pk=pk)
+        return followed_by
+
+
 
 class Follower(models.Model):
     user_followed = models.ForeignKey(
