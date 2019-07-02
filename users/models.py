@@ -41,9 +41,11 @@ class Profile(AbstractBaseUser):
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     email = models.EmailField(max_length=150)
-    bio = models.TextField(max_length=500, blank=True)
+    bio = models.TextField(max_length=500, null=True, blank=True)
     add_date = models.DateTimeField(auto_now_add=True, db_index=True)
     is_admin = models.BooleanField(default=False)
+    
+    objects = ProfileManager()
 
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = ['email', 'first_name', 'last_name']
