@@ -1,7 +1,9 @@
 from django.urls import path
+from django.conf.urls import url, include
 from . import views
 
+
 urlpatterns = [
-    path('', views.index, name="index"),
-    path('follow/', views.FollowView, name="follow"),
+    url(r'^', views.index, name="index"),
+    url(r'^follow/', views.FollowView.as_view(), name="follow"),
 ]

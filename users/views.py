@@ -11,7 +11,6 @@ def index(request):
     return HttpResponse("Test. Here we go.")
 
 # APIview for following and unfollowing a user
-@login_required
 class FollowView(APIView):
     """
     View function for following another user.
@@ -22,8 +21,10 @@ class FollowView(APIView):
     request - A WSGI Request object
     pk - A number representing the primary key of the user being followed
     """
+    @login_required
     def get(self, request):
-        return HttpResponse("Test. Here we go.")
+        return HttpResponse("Test. Holy Shit. Please change.")
+    @login_required
     def post(self,request):
         if not request.user:
             raise ValueError('Not logged in')
@@ -36,7 +37,7 @@ class FollowView(APIView):
                     user_following=request.user.pk
             )
             return Response({'followed' : True})
-
+    @login_required
     def delete(self, request):
         if not request.user:
             raise ValueError('Not logged in')
