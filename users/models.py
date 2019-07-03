@@ -2,6 +2,10 @@ from django.db import models
 from django.contrib.auth.models import (
         AbstractBaseUser, BaseUserManager)
 from django.db.models.signals import post_save
+# Maybe later
+# from django.core.files.storage import FileSystemStorage
+
+# fs = FileSystemStorage(location='users/profile_pictures/')
 
 class ProfileManager(BaseUserManager):
     def create_user(self, username, first_name, last_name, email, password, bio=None):
