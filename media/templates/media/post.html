@@ -5,6 +5,11 @@
     <h5>Posted on {{post.post_date}}</h5>
 
     <h3>Comments</h3>
+    <form action="{% url 'media:comment' post.pk %}" method="post">
+    {% csrf_token %}
+      <input type="text" name="comment">
+      <input type="submit" value="Comment">
+    </form>
     {% for comment in comment_set %}
       <div>{{ comment.posted_by.username }} {{ comment.comment }}</div>
       <div>Posted on {{ comment.post_date}}</div>
