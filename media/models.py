@@ -1,4 +1,7 @@
 from django.db import models
+from django.core.files.storage import FileSystemStorage
+
+fs = FileSystemStorage(location='media/posts/')
 
 class Post(models.Model):
     posted_by = models.ForeignKey(
@@ -6,6 +9,7 @@ class Post(models.Model):
         related_name="posts",
         on_delete=models.CASCADE
     )
+    photo = models.ImageField(storage=fs)
     caption = models.CharField(max_length=500, null=True, blank=True)
     post_date = models.DateTimeField(auto_now_add=True, db_index=True)
 
