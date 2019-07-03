@@ -1,10 +1,23 @@
-<h1>{{ profile.username }}<h2>
-<div>
-{% if profile.bio %}
-  {{ profile.bio }}
-{% endif %}
+{% load mathfilters %}
+<div style="text-align: center;">
+  <div style="display:inline-block; text-align: left; width: 1000px;">
+    <h1>{{ profile.username }}<h2>
+      <div>
+        {% if profile.bio %}
+          {{ profile.bio }}
+        {% endif %}
+      </div>
+      <div>
+        {{ profile.followers.count }} followers {{ profile.following.count }} following
+      </div>
+      <div>
+      {% for post in post_set %}
+        <a href="{% url 'media:post' post.pk %}"><img src="{{ post.photo.url }}" style="height:300px;width:300px;object-fit:scale-down;"></img></a>
+      {% if forloop.counter|mod:3 == 0 %}
+      </div>
+      <div>
+        {% endif %}
+        {% endfor %}
+      </div>
+    </div>
 </div>
-
-{% for post in post_set %}
-  <a href="{% url 'media:post' post.pk %}"><img src="{{ post.photo.url }}"></img></a>
-{% endfor %}
