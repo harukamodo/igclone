@@ -1,4 +1,5 @@
 import os
+from functools import reduce
 from django.db import transaction
 from django.shortcuts import render
 from django.http import HttpResponse
@@ -12,6 +13,23 @@ from django.utils.crypto import get_random_string
 
 from users.models import Profile, Follower
 from media.models import Post, Comment, fs as PhotoStorage
+
+@login_required
+def UserFeed(request):
+    """
+    view to return user feed
+    """
+    template = loader.get_template('media/feed.html')
+    user = request.user
+    following = user.get_following()
+    #combining the posts of all users that are followed by this profile
+    posts = reduce(lambda x,y: x+y,[ list(f.posts.all()) for f in following ], [])
+    #sorting in order of most recent
+    posts = sorted(posts, key=lambda p: p.post_date, reverse=True)
+    context = {
+        'post_set': posts
+    }
+    return HttpResponse(template.render(context, request))
 
 @login_required
 def ProfilePage(request, username):

@@ -1,0 +1,11 @@
+{% for post in post_set %}
+<div>
+  <a href="{% url 'media:profile' post.posted_by.username %}">
+    {{ post.posted_by.username }}
+  </a>
+  <img src="{{ post.photo.url}}"></img>
+  <h5>{{post.posted_by.username}} {{post.caption}}</h5>
+  <h5>Posted on {{post.post_date}}</h5>
+  <a href="{% url 'media:post' post.pk %}">See Comments...</a>
+<div>
+{% endfor %}

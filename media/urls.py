@@ -6,6 +6,7 @@ from . import views
 from media.models import fs
 
 urlpatterns = [
+    url(r'^feed/$', views.UserFeed, name='feed'),
     url(r'^profile/(?P<username>\w+)/$', views.ProfilePage, name="profile"),
     url(r'^post/', include([
         url(r'^(?P<pk>\w+)/$', views.PostPage, name="post"),
