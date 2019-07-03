@@ -10,7 +10,7 @@ urlpatterns = [
     url(r'^profile/(?P<username>\w+)/$', views.ProfilePage, name="profile"),
     url(r'^post/', include([
         url(r'^(?P<pk>\w+)/$', views.PostPage, name="post"),
-        url(r'^$', views.MakePost, name="make_post"),
+        url(r'^$', views.MakePost.as_view(), name="make_post"),
         ])),
     url(r'^comment/(?P<pk>\w+)/$', views.MakeComment, name="comment"),
 ]

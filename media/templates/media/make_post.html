@@ -1,0 +1,13 @@
+<div style="text-align:center;">
+	<div style="display:inline-block;width:300px;text-align:left;">	
+		<h3>Post an Image</h3>
+		<form action="{% url 'media:make_post' %}"` method="post" enctype="multipart/form-data">
+		{% csrf_token %}
+			<h3>Image</h3>
+			<input type="file" name="photo" accept="image/*">
+			<h3>Caption</h3>
+			<input type="text" name="caption">
+			<input type="submit" value="Submit">
+		</form>
+	</div>
+</div>

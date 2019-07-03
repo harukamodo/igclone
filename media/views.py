@@ -2,8 +2,9 @@ import os
 from functools import reduce
 from django.db import transaction
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.template import loader
+from django.urls import reverse
 from rest_framework.response import Response
 from rest_framework.views import  APIView
 from rest_framework.permissions import IsAuthenticated
@@ -59,35 +60,42 @@ def PostPage(request, pk):
     }
     return HttpResponse(template.render(context, request))
 
-@api_view(['POST',])
-@permission_classes([IsAuthenticated, ])
-@transaction.atomic
-def MakePost(request):
+
+class MakePost(APIView):
     """
     View function for making posts.
 
     Returns Post upon success.
     """
     #[Needs Validator]
+    permissions_classes = (IsAuthenticated,)
+    
+    def get(self, request):
+        user = request.user
+        template = loader.get_template('media/make_post.html')
+        
+        return HttpResponse(template.render({}, request))
 
-    caption = request.data.get('caption')
-    photo = request.FILES['photo']
-    print(photo.name)
-    post = Post.objects.create(
-        posted_by=request.user,
-        photo=photo,
-        caption=caption
-    )
+    @transaction.atomic
+    def post(self, request):
+        caption = request.data.get('caption')
+        photo = request.FILES['photo']
+        print(photo.name)
+        post = Post.objects.create(
+            posted_by=request.user,
+            photo=photo,
+            caption=caption
+        )
 
-    name = "%d_%d_" % (request.user.pk, post.pk)
-    name = name + get_random_string(length=32) + "." + post.photo.name.split('.')[-1]
-    old_path = post.photo.path
-    post.photo.name = name
-    path = PhotoStorage.path(name)
-    os.rename(old_path, path)
-    post.save()
+        name = "%d_%d_" % (request.user.pk, post.pk)
+        name = name + get_random_string(length=32) + "." + post.photo.name.split('.')[-1]
+        old_path = post.photo.path
+        post.photo.name = name
+        path = PhotoStorage.path(name)
+        os.rename(old_path, path)
+        post.save()
 
-    return Response({ 'post_success' : True})
+        return HttpResponseRedirect(reverse('media:post', kwargs={ 'pk': post.pk}))
 
 @api_view(['POST',])
 @permission_classes([IsAuthenticated,])
@@ -106,4 +114,4 @@ def MakeComment(request, pk):
             comment=comment
         )
 
-        return Response({ 'comment_success': True })
+        return HttpResponseRedirect(reverse('media:post', kwargs={'pk': comment.posted_on.pk}))

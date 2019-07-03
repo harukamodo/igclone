@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
@@ -23,14 +23,8 @@ class FollowView(APIView):
     """
     permission_classes = (IsAuthenticated,)
 
-    def get(self, request):
-        if not request.user:
-            return HttpResponse('u suck')
-
-        return HttpResponse(request.user)
-
     def post(self,request):
-        # note that this is sometimes interpretted as a __str__
+        # note that this is sometimes interpretted as a str
         # this is not good and if I have time I would like to
         # write some request validator
         # same applies for any API Call from here on with comment
@@ -43,7 +37,6 @@ class FollowView(APIView):
                 raise ValueError('User does not exist')
             else:
 
-                print('hello')
                 followed = Follower.objects.create(
                     user_followed_id=pk,
                     user_follower_id=request.user.pk
