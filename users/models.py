@@ -93,6 +93,7 @@ class Profile(AbstractBaseUser):
                     user_followed_id=pk)
         return following
 
+    # returns the following object where this user is followed by user denoted
     def get_followed_by_object(self, pk):
         followed_by = None
         if self.is_followed_by_user(pk):
@@ -100,6 +101,10 @@ class Profile(AbstractBaseUser):
                     user_follower_id=pk,
                     user_followed=self)
         return followed_by
+
+    # returns all posts
+    def get_posts(self):
+        return self.posts.order_by('-post_date').all()
 
 
 

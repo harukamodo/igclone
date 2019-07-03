@@ -1,0 +1,9 @@
+<img src="{{ post.photo.url }}"></img>
+<h5>{{post.posted_by.username}} {{post.caption}}</h5>
+<h5>Posted on {{post.post_date}}</h5>
+
+<h3>Comments</h3>
+{% for comment in comment_set %}
+  <div>{{ comment.posted_by.username }} {{ comment.comment }}</div>
+  <div>Posted on {{ comment.post_date}}</div>
+{% endfor %}

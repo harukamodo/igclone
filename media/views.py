@@ -2,6 +2,7 @@ import os
 from django.db import transaction
 from django.shortcuts import render
 from django.http import HttpResponse
+from django.template import loader
 from rest_framework.response import Response
 from rest_framework.views import  APIView
 from rest_framework.permissions import IsAuthenticated
@@ -11,6 +12,34 @@ from django.utils.crypto import get_random_string
 
 from users.models import Profile, Follower
 from media.models import Post, Comment, fs as PhotoStorage
+
+@login_required
+def ProfilePage(request, username):
+    """
+    Profile page that displays all the user's photos
+    """
+    profile = Profile.objects.get(username=username)
+    template = loader.get_template('media/profile.html')
+    posts = profile.get_posts()
+    context = {
+        'profile': profile,
+        'post_set': posts
+    }
+    return HttpResponse(template.render(context, request))
+
+@login_required
+def PostPage(request, pk):
+    """
+    Post page that displays all the comments
+    """
+    post = Post.objects.get(pk=pk)
+    template = loader.get_template('media/post.html')
+    comments = post.comments.order_by('-post_date').all()
+    context = {
+        'post': post,
+        'comment_set': comments
+    }
+    return HttpResponse(template.render(context, request))
 
 @api_view(['POST',])
 @permission_classes([IsAuthenticated, ])

@@ -1,0 +1,10 @@
+<h1>{{ profile.username }}<h2>
+<div>
+{% if profile.bio %}
+  {{ profile.bio }}
+{% endif %}
+</div>
+
+{% for post in post_set %}
+  <a href="{% url 'media:post' post.pk %}"><img src="{{ post.photo.url }}"></img></a>
+{% endfor %}
