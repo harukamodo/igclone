@@ -20,7 +20,6 @@ class FollowView(APIView):
 
     Arguments:
     request - A WSGI Request object
-    pk - A number representing the primary key of the user being followed
     """
     permission_classes = (IsAuthenticated,)
 
@@ -37,7 +36,7 @@ class FollowView(APIView):
         # same applies for any API Call from here on with comment
         # [Needs Validator]
         pk = request.data.get('pk')
-        if request.data.get('pk'):
+        if pk:
             if request.user.is_following_user(pk):
                 raise ValueError('You are already following this user')
             elif not Profile.objects.filter(pk=pk).exists():

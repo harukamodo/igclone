@@ -6,7 +6,7 @@ class Post(models.Model):
         related_name="posts",
         on_delete=models.CASCADE
     )
-    caption = models.CharField(max_length=500, blank=True)
+    caption = models.CharField(max_length=500, null=True, blank=True)
     post_date = models.DateTimeField(auto_now_add=True, db_index=True)
 
 class Comment(models.Model):
@@ -22,5 +22,3 @@ class Comment(models.Model):
     )
     comment = models.CharField(max_length=500)
     post_date = models.DateTimeField(auto_now_add=True, db_index=True)
-    
-
