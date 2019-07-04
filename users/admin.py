@@ -14,6 +14,7 @@ class UserAdmin(BaseUserAdmin):
     list_display = ('username', 'first_name', 'last_name', 'email', 'bio')
     list_filter = ('is_admin',)
     fieldsets = (
+        (None, {'fields': ('password',)}),
         ('Personal info',
             {'fields': ('first_name','last_name','email',)
             }),
@@ -35,5 +36,3 @@ class UserAdmin(BaseUserAdmin):
 
 admin.site.register(Profile, UserAdmin)
 admin.site.unregister(Group)
-
-

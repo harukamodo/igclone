@@ -1,6 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
+from django.template import loader
 from django.urls import reverse
+from django.contrib.auth import logout
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
@@ -17,21 +19,11 @@ def SearchProfiles(request):
         'searched': list(user_set)
     }
     template = loader.get_template('users/search_results.html')
-    return HttpResponse(template.render(context, request)
-
+    return HttpResponse(template.render(context, request))
 # APIview for following and unfollowing a user
-class FollowView(APIView):
-    """
-    View function for following another user.
-    """
 @api_view(['POST',])
 @permission_classes([IsAuthenticated,])
 def FollowView(request, pk):
-        # note that this is sometimes interpretted as a str
-        # this is not good and if I have time I would like to
-        # write some request validator
-        # same applies for any API Call from here on with comment
-        # [Needs Validator]
     if request.user.is_following_user(pk):
         raise ValueError('You are already following this user')
     elif not Profile.objects.filter(pk=pk).exists():
@@ -60,3 +52,6 @@ def UnfollowView(request, pk):
         print(reverse('media:profile',kwargs={'username':user.username}))        
         return HttpResponseRedirect(reverse('media:profile', kwargs= {'username': user.username}))
 
+def LogoutView(request):
+    logout(request)
+    return redirect('/admin/login/')

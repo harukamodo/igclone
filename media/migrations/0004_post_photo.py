@@ -14,7 +14,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='post',
             name='photo',
-            field=models.ImageField(default='D:\\Pictures\x02.png', storage=django.core.files.storage.FileSystemStorage(location='media/posts'), upload_to=''),
+            field=models.ImageField(storage=django.core.files.storage.FileSystemStorage(location='media/posts'), upload_to=''),
             preserve_default=False,
         ),
     ]

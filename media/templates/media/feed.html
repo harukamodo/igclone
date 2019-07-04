@@ -1,0 +1,23 @@
+
+<div style="text-align: center;">
+	<div style="text-align: right;">
+		<a href="{% url 'users:logout' %}">logout</a>
+	</div>
+<a href="{% url 'media:make_post' %}">New Post</a>
+<form action="{% url 'users:search' %}" method="get">
+	<input type="text" name="search">
+	<input type="submit" value="Search For Users">
+</form>
+{% for post in post_set %}
+<div style="display: inline-block;overflow-y:auto;">
+  <img src="{{ post.photo.url}}" style="height:300px;width:300px;object-fit:scale-down;"></img>
+  <div style="text-align: left;">
+    <h5><a href="{% url 'media:profile' post.posted_by.username %}">
+      {{ post.posted_by.username }}
+    </a> {{post.caption}}</h5>
+    <h5>Posted on {{post.post_date}}</h5>
+    <a href="{% url 'media:post' post.pk %}">See Comments...</a>
+  </div>
+<div>
+{% endfor %}
+</div>

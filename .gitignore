@@ -2,3 +2,4 @@
 *.pyo
 media/posts/*
 *.sqlite3
+static/
