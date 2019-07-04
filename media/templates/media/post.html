@@ -1,7 +1,15 @@
 <div style="text-align: center;">
+  <div style="text-align: right;">
+  	<a href="{% url 'users:logout' %}">logout</a>
+  </div>
+  <a href="{% url 'media:make_post' %}">New Post</a>
+  <form action="{% url 'users:search' %}">
+	<input type="text" name="search">
+	<input type="submit" value="Search for Users">
+  </form>
   <div style="display:inline-block; text-align: left;">
     <img src="{{ post.photo.url }}" style="height:300px;width:300px;object-fit:scale-down;"></img>
-    <h5><a href="{% url 'media:profile' post.posted_by.pk %}">{{post.posted_by.username}}</a> {{post.caption}}</h5>
+    <h5><a href="{% url 'media:profile' post.posted_by.username %}">{{post.posted_by.username}}</a> {{post.caption}}</h5>
     <h5>Posted on {{post.post_date}}</h5>
 
     <h3>Comments</h3>
@@ -13,7 +21,7 @@
       </div>
     </form>
     {% for comment in comment_set %}
-      <div>{{ comment.posted_by.username }} {{ comment.comment }}</div>
+    <div><a href="{% url 'media:profile' comment.posted_by.username %}">{{ comment.posted_by.username }}</a> {{ comment.comment }}</div>
       <div>Posted on {{ comment.post_date}}</div>
     {% endfor %}
   </div>

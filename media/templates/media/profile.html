@@ -1,7 +1,30 @@
 {% load mathfilters %}
+
 <div style="text-align: center;">
+  <div style="text-align:right;">
+  	<a href="{% url 'users:logout' %}">logout</a>
+  </div>
+  <a href="{% url 'media:make_post' %}">New Post</a>
+  <form action="{% url 'users:search' %}" method="get">
+	<input type="text" name="search">
+	<input type="submit" value="Search for Users">
+  </form>
   <div style="display:inline-block; text-align: left; width: 1000px;">
-    <h1>{{ profile.username }}<h2>
+    <h2>{{ profile.username }}</h2>
+      <div>
+	{% if is_you is False %}
+	   {% if following is True %}
+	   <form action={% url 'users:unfollow' profile.pk %} method="post">
+		{% csrf_token %}
+		<input type="submit" value="unfollow">
+	   </form>
+	   {% else %}
+	   <form action={% url 'users:follow' profile.pk %} method="post"> 
+		{% csrf_token %}
+	        <input type="submit" value="follow">
+	   </form>
+	   {% endif %}
+	{% endif %}
       <div>
         {% if profile.bio %}
           {{ profile.bio }}

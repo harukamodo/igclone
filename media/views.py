@@ -37,12 +37,17 @@ def ProfilePage(request, username):
     """
     Profile page that displays all the user's photos
     """
+    user = request.user
     profile = Profile.objects.get(username=username)
     template = loader.get_template('media/profile.html')
     posts = profile.get_posts()
+    print(user == profile)
+    print(user.is_following_user(profile.pk))
     context = {
+        'is_you' : user == profile,
         'profile': profile,
-        'post_set': posts
+        'post_set': posts,
+        'following': user.is_following_user(profile.pk)
     }
     return HttpResponse(template.render(context, request))
 
@@ -65,7 +70,7 @@ class MakePost(APIView):
     """
     View function for making posts.
 
-    Returns Post upon success.
+    Returns Post upon success
     """
     #[Needs Validator]
     permissions_classes = (IsAuthenticated,)
