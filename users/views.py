@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
+from django.urls import reverse
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
@@ -7,19 +8,10 @@ from django.contrib.auth.decorators import login_required
 
 from users.models import Profile, Follower
 
-@login_required
-def index(request):
-    return HttpResponse("Test. Here we go.")
-
 # APIview for following and unfollowing a user
 class FollowView(APIView):
     """
     View function for following another user.
-
-    Returns the follower object upon success
-
-    Arguments:
-    request - A WSGI Request object
     """
     permission_classes = (IsAuthenticated,)
 
@@ -36,12 +28,13 @@ class FollowView(APIView):
             elif not Profile.objects.filter(pk=pk).exists():
                 raise ValueError('User does not exist')
             else:
-
+                user = Profile.objects.get(pk=pk)
                 followed = Follower.objects.create(
-                    user_followed_id=pk,
+                    user_followed=user,
                     user_follower_id=request.user.pk
                 )
-                return Response({'followed' : True})
+
+                return HttpResponseRedirect(reverse('media:profile', kwargs={ 'username': user.username }))
         else:
             raise ValueError('Pk required')
 
@@ -54,9 +47,11 @@ class FollowView(APIView):
             elif not Profile.objects.filter(pk=pk).exists():
                 raise ValueError('User does not exist')
             else:
+                user = Profile.objects.get(pk)
                 follower_obj = request.user.get_follower_object(pk)
                 unfollowed = follower_obj.user_followed
                 follower_obj.delete()
-                return Response({'unfollowed': True})
+                
+                return HttpResponseRedirect(reverse('media:profile', kwargs= {'username': user.username}))
         else:
             raise ValueError('Pk required')
