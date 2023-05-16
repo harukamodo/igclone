@@ -1,5 +1,5 @@
 # igclone
-small project, webbased IG clone
+small project, webbased IG clone for an interview
 
 A simple webbased IG clone
 
